@@ -9,11 +9,13 @@ class GraphQLApp {
     graphiqlPath = '/admin/graphiql',
     schemaName = 'public',
     apollo = {},
+    enablePlayground = false,
   } = {}) {
     this._apiPath = apiPath;
     this._graphiqlPath = graphiqlPath;
     this._apollo = apollo;
     this._schemaName = schemaName;
+    this._enablePlayground = enablePlayground;
   }
 
   /**
@@ -23,9 +25,10 @@ class GraphQLApp {
     const server = createApolloServer(keystone, this._apollo, this._schemaName, dev);
     const apiPath = this._apiPath;
     const graphiqlPath = this._graphiqlPath;
+    const enablePlayground = this._enablePlayground || dev;
     const app = express();
 
-    if (dev && graphiqlPath) {
+    if (enablePlayground && graphiqlPath) {
       // This is a convenience to make the out of the box experience slightly simpler.
       // We should reconsider support for this at some point in the future. -TL
       app.use(
